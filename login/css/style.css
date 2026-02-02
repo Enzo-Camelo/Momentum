@@ -1,0 +1,225 @@
+/* Variáveis de Cores (Baseadas nos nomes do FlutterFlow) */
+:root {
+    --deep-chocolate: #151111;
+    --sea-blue: #133656;
+    --ghost-white: #F8F8F8;
+    --spa-day: #4A7FB7;
+    --secondary-bg: #14181B;
+    --primary-bg: #1D2428;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    overflow-x: hidden;
+    color: var(--spa-day);
+}
+
+.main-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(40deg, var(--sea-blue) 0%, var(--deep-chocolate) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.content-container {
+    width: 100%;
+    max-width: 570px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Logo Superior */
+.logo-section {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.main-logo {
+    width: 185px;
+    /* Default */
+    height: auto;
+    object-fit: contain;
+}
+
+/* Card */
+.login-card {
+    background-color: var(--secondary-bg);
+    border-radius: 18px;
+    padding: 24px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.title {
+    font-family: 'Inter Tight', sans-serif;
+    color: var(--ghost-white);
+    /* Ajustado para legibilidade no card branco */
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: var(--spa-day);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* Form */
+.input-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.input-group label {
+    display: none;
+    /* Flutter usa labelText dentro do campo */
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 2px solid var(--primary-bg);
+    background-color: var(--primary-bg);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    color: var(--ghost-white);
+}
+
+input:focus {
+    border-color: var(--spa-day);
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i {
+    position: absolute;
+    right: 15px;
+    color: var(--spa-day);
+    cursor: pointer;
+}
+
+.btn-signin {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--sea-blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 8px;
+    transition: filter 0.2s;
+}
+
+.btn-signin:hover {
+    filter: brightness(1.1);
+}
+
+/* Rodapé do Card */
+.register-text {
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--ghost-white);
+}
+
+.highlight {
+    color: var(--spa-day);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.contact-row {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--spa-day);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.contact-item i {
+    color: var(--spa-day);
+}
+
+/* Footer Externo */
+.footer-section {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--ghost-white);
+}
+
+.powered-by {
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.tech-name {
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    margin: 4px 0;
+}
+
+.footer-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+
+/* Media Queries para Responsividade (Mimicando o Flutter) */
+@media (min-width: 1400px) {
+    .main-logo {
+        width: 250px;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .main-logo {
+        width: 275px;
+    }
+
+    .title {
+        font-size: 34px;
+    }
+}
+
+@media (min-width: 1900px) {
+    .main-logo {
+        width: 300px;
+    }
+
+    .title {
+        font-size: 36px;
+    }
+}

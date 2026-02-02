@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momentum</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./login/css/style.css">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Inter+Tight:wght@600&family=Urbanist:wght@300;600&display=swap"
+        rel="stylesheet">
+        
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <main class="content-container">
+
+            <!-- Logo Topo -->
+            <div class="logo-section">
+                <img src="./login/assets/img/MomentumPNG.png" alt="Momentum Logo" class="main-logo">
+            </div>
+
+            <!-- Card de Login -->
+            <div class="login-card">
+                <h1 class="title">Bem-Vindo!</h1>
+                <p class="subtitle">Preencha as informações abaixo para acessar sua conta.</p>
+
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Email" required autocomplete="email">
+                    </div>
+
+                    <div class="input-group password-group">
+                        <label for="password">Senha</label>
+                        <div class="input-with-icon">
+                            <input type="password" id="password" placeholder="Senha" required
+                                autocomplete="current-password">
+                            <i class="far fa-eye-slash" id="togglePassword"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-signin">Sign In</button>
+                </form>
+
+                <div class="register-text">
+                    Não possui uma conta? <span class="highlight">Entre em contato</span>
+                </div>
+
+                <div class="contact-row">
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>(47) 98832-7642</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="far fa-envelope"></i>
+                        <span>comercial@youngarts.com.br</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer-section">
+                <p class="powered-by">Powered By</p>
+                <p class="tech-name">YoungTech</p>
+                <img src="./login/assets/img/logo_young.png" alt="YoungTech Logo" class="footer-logo">
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="./login/js/script.js"></script>
+</body>
+
+</html>

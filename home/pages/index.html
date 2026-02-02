@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <!-- Autenticação Supabase -->
+    <script type="module">
+        import { supabaseClient } from '../../login/js/supabase.js';
+
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                // Se não houver sessão, volta para o login
+                window.location.href = '../../index.html';
+            }
+        }
+        checkAuth();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momentum</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- Fonts and Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Roboto:wght@400;700&family=Urbanist:wght@300;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Lado Esquerdo: Clima e Cotações -->
+        <aside id="sidebar">
+            <header class="location-header">
+                <div class="loc-info">
+                    <span class="material-icons">location_on</span>
+                    <span id="city-state">Carregando...</span>
+                    <span id="current-date" class="date-text"></span>
+                </div>
+                <div>
+                    <button id="fullscreen-btn" class="material-icons icon-button" title="Tela Cheia">fullscreen</button>
+                    <button id="logout-btn" class="material-icons icon-button" title="Sair">logout</button>
+                </div>
+            </header>
+
+            <section id="clock-section">
+                <h1 id="current-time">00:00</h1>
+            </section>
+
+            <section id="weather-summary">
+                <div id="temp-now">--°</div>
+                <div class="weather-icon-box">
+                    <img id="main-weather-icon" src="" alt="clima">
+                    <span id="weather-desc">--</span>
+                </div>
+            </section>
+
+            <!-- Seção de Transição: Previsão vs Cotação -->
+            <div class="carousel-container">
+                <div id="forecast-panel" class="slide active">
+                    <h4 id="previsao-do-tempo">PREVISÃO DO TEMPO</h4>
+                    <div id="forecast-list">
+                        <!-- Gerado via JS -->
+                    </div>
+                </div>
+
+                <div id="quotation-panel" class="slide">
+                    <div class="quotation-section">
+                        <h3 class="panel-title">COTAÇÃO ATUAL</h3>
+                        <div class="q-grid">
+                            <div class="q-col">
+                                <div class="coin-header"><img src="../assets/img/coins/dolar.png"> DÓLAR</div>
+                                <div id="usd-bid" class="q-value">R$ 0,00</div>
+                            </div>
+                            <div class="q-col">
+                                <div class="coin-header"><img src="../assets/img/coins/euro.png"> EURO</div>
+                                <div id="eur-bid" class="q-value">R$ 0,00</div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="quotation-section">
+                        <h3 class="panel-title">FECHAMENTO ONTEM</h3>
+                        <div class="q-grid">
+                            <div id="usd-yesterday" class="q-value-sub">R$ 0,00</div>
+                            <div id="eur-yesterday" class="q-value-sub">R$ 0,00</div>
+                        </div>
+                    </div>
+                
+                    <div class="quotation-section">
+                        <h3 class="panel-title">VARIAÇÃO DESDE O ÚLTIMO FECHAMENTO</h3>
+                        <div class="q-grid">
+                            <div id="usd-pct" class="q-pct">0,00%</div>
+                            <div id="eur-pct" class="q-pct">0,00%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Lado Direito: Player e Propagandas -->
+        <main id="main-content">
+            <div id="player-view" class="active-content">
+                <!-- Container da Imagem (Onde a mágica acontece) -->
+                <div class="art-container">
+                    <!-- Imagem da Música/Rádio -->
+                    <img id="radio-logo" src="../assets/img/generic_song.jpg" alt="Capa">
+                    <!-- Imagem da Propaganda (Inicia escondida) -->
+                    <img id="ad-image" src="" alt="Propaganda" style="display: none; object-fit: contain;">
+                    <!-- Elemento para a animação Lottie -->
+                    <div id="lottie-player"></div>
+                </div>
+        
+                <!-- Estas informações SEMPRE ficam visíveis -->
+                <div class="track-info">
+                    <h2 id="song-name">Carregando...</h2>
+                    <h3 id="artist-name">Aguarde</h3>
+                </div>
+        
+                <!-- Botão de Pause/Play -->
+                <div class="controls">
+                    <button id="play-pause-btn" class="material-icons">play_arrow</button>
+                </div>
+            </div>
+        
+            <!-- Powered By permanece no final -->
+            <footer class="powered-by">
+                <span>Powered By</span>
+                <strong>YoungTech</strong>
+                <img src="../assets/img/logo_young.png" alt="YT" width="30">
+            </footer>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <script type="module" src="../js/main.js"></script>
+</body>
+
+</html>

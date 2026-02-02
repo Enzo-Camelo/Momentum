@@ -1,0 +1,430 @@
+:root {
+    --deep-chocolate: #151111;
+    --sea-blue: #133656;
+    --ghost-white: #F8F8F8;
+    --spa-day: #4A7FB7;
+}
+
+body,
+main,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--deep-chocolate);
+    color: var(--ghost-white);
+    overflow: hidden;
+}
+
+#app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Sidebar */
+#sidebar {
+    width: 50%;
+    background: linear-gradient(to left, var(--deep-chocolate), var(--sea-blue));
+    color: var(--ghost-white);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.location-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.loc-info {
+    display: flex;
+    align-items: center;
+}
+
+.date-text {
+    margin-left: 15px;
+    font-size: 1.1rem;
+    color: var(--ghost-white);
+}
+
+#city-state {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+    /* Espaço entre os botões */
+    align-items: center;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    color: var(--ghost-white);
+    cursor: pointer;
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.icon-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.icon-button:active {
+    transform: scale(0.95);
+}
+
+#clock-section h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 7rem;
+    text-align: center;
+}
+
+#weather-summary {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 6rem;
+}
+
+.weather-icon-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+/* --- CARROSSEL PROFISSIONAL --- */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* Garante que o slide sumindo não crie scroll */
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    /* Top, Right, Bottom, Left = 0 */
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(-100%);
+    /* Começa na esquerda */
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+    display: block !important;
+    /* Mantemos no DOM, controlamos com transform/opacity */
+    pointer-events: none;
+}
+
+/* Estado Ativo (Visível no centro) */
+.slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    z-index: 2;
+    pointer-events: auto;
+}
+
+/* Estado de Saída (Foge para a direita) */
+.slide.exit {
+    opacity: 0;
+    transform: translateX(100%);
+    z-index: 1;
+}
+
+/* Ajuste no Ad Image para Fade Suave no lado direito */
+#ad-image,
+#radio-logo {
+    transition: opacity 0.8s ease-in-out;
+}
+
+.forecast-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--spa-day);
+}
+
+/* Container que segura o Player/Propaganda */
+#main-content {
+    width: 50%;
+    height: 100vh;
+    /* Ocupa a altura total da tela */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* Distribui os itens (logo no meio, footer embaixo) */
+    padding: 30px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Container específico da visualização do player */
+#player-view,
+#ad-view {
+    width: 100%;
+    flex: 1;
+    /* Faz esse container ocupar todo o espaço central disponível */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* O "Quadrado" da imagem */
+.art-container {
+    width: 100%;
+    max-width: 70vh;
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    background: transparent;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+#lottie-player {
+    position: absolute;
+    bottom: -140px;
+    /* Pequeno ajuste para garantir que toque a borda */
+    left: 0;
+    width: 100%;
+    height: 80%;
+    /* Defina uma altura proporcional (ex: 30% da capa da música) */
+    z-index: 10;
+    pointer-events: none;
+    display: block;
+    overflow: hidden;
+    filter: drop-shadow(0px -2px 10px rgba(0, 0, 0, 0.3));
+}
+
+#radio-logo,
+#ad-image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    /* Uma em cima da outra */
+    top: 0;
+    left: 0;
+}
+
+#radio-logo {
+    object-fit: cover;
+    /* Capa da música preenche tudo */
+}
+
+#ad-image {
+    object-fit: contain;
+    /* Propaganda aparece inteira sem cortar */
+    background-color: transparent;
+}
+
+/* Ajuste das informações da música para não sumirem */
+.track-info {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+#artist-name {
+    color: var(--spa-day);
+}
+
+#play-pause-btn {
+    background: var(--ghost-white);
+    color: var(--deep-chocolate);
+    border: none;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#play-pause-btn:active {
+    transform: scale(0.95);
+    /* Efeito de clique */
+}
+
+.powered-by {
+    font-family: 'Urbanist', sans-serif;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.hidden-content {
+    display: none;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+}
+
+#player-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#main-weather-icon {
+    width: 100px;
+    height: 100px;
+}
+
+/* Previsão do tempo */
+
+.forecast-title {
+    color: #4a86b3;
+    /* Tom de azul da imagem */
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+#forecast-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.forecast-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.1rem;
+}
+
+.forecast-row:last-child {
+    border-bottom: none;
+}
+
+.forecast-day {
+    width: 25%;
+    text-transform: lowercase;
+}
+
+.forecast-rain {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 20%;
+    font-size: 1.1rem;
+}
+
+.rain-icon {
+    width: 30px;
+}
+
+.forecast-weather-icon {
+    width: 40px;
+}
+
+.forecast-temps {
+    display: flex;
+    gap: 10px;
+    width: 30%;
+    justify-content: flex-end;
+}
+
+.temp-max,
+.temp-min {
+    display: flex;
+    align-items: center;
+}
+
+.temp-max::before {
+    content: '↑';
+    margin-right: 4px;
+}
+
+.temp-min::before {
+    content: '↓';
+    margin-right: 4px;
+}
+
+#previsao-do-tempo {
+    color: var(--spa-day);
+    font-weight: 400;
+}
+
+/* Cotação */
+
+.panel-title {
+    color: var(--spa-day);
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 20px 0 20px 0;
+}
+
+.q-grid {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.coin-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.coin-header img {
+    width: 24px;
+}
+
+.q-value, .q-value-sub {
+    font-size: 1.5rem;
+}
+
+.q-pct {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.pct-up {
+    color: #52b788;
+}
+
+.pct-down {
+    color: #e63946;
+}
+
+/* Controle do Carrossel */
+.slide {
+    display: none;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.slide.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
