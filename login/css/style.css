@@ -223,3 +223,24 @@ input:focus {
         font-size: 36px;
     }
 }
+
+/* Foco de elementos navegáveis */
+
+:focus {
+    outline: none;
+}
+
+/* Efeito de foco nos inputs e no botão */
+.navigable:focus {
+    border-color: var(--spa-day) !important;
+    box-shadow: 0 0 12px rgba(100, 172, 255, 0.4);
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+/* Efeito específico para o botão de login */
+.btn-signin.navigable:focus {
+    background-color: var(--spa-day) !important;
+    color: var(--ghost-white) !important;
+    transform: scale(1.05);
+}

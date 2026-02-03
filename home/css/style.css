@@ -249,6 +249,9 @@ html {
     font-size: 2rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
 
 #play-pause-btn:active {
@@ -426,5 +429,57 @@ html {
 
     to {
         opacity: 1;
+    }
+}
+
+/* Foco de navegação */
+:focus {
+    outline: none;
+}
+
+/* Estilo para quando o botão estiver focado pelo controle remoto */
+.navigable:focus {
+    transform: scale(1.05);
+    /* Aumenta o tamanho */
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+#play-pause-btn:focus {
+    outline: none;
+    transform: scale(1.05);
+    background-color: var(--ghost-white) !important;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+#play-pause-btn:focus::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    /* Cor da aura (um branco transparente) */
+    border: 2px solid rgba(255, 255, 255, 0.6);
+
+    /* Nome da animação | tempo | infinita | suavidade */
+    animation: focal-aura 1.5s infinite ease-out;
+    z-index: -1;
+    /* Fica atrás do botão */
+}
+
+/* 3. Definição do movimento da aura */
+@keyframes focal-aura {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1.6);
+        /* Expande suavemente */
+        opacity: 0;
+        /* Desaparece enquanto expande */
     }
 }
