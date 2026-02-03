@@ -108,7 +108,7 @@ async function startApp() {
     initCarousel(30000); // 30 segundos
 
     // Intervals
-    setInterval(refreshMusic, 15000); // 15 segundos
+    setInterval(refreshMusic, 5000); // 5 segundos
     setInterval(refreshWeatherAndFinance, 300000); // 5 minutos
 }
 

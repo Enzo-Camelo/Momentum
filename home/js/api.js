@@ -51,19 +51,20 @@ export async function fetchNowPlaying() {
     const targetUrl = appState.urlCastResource;
     if (!targetUrl || targetUrl === 'null' || targetUrl === '') return;
 
-    // Usando o proxy (ajuste se já liberou o CORS no servidor)
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-
     try {
-        const response = await fetch(proxyUrl);
-        const data = await response.json();
-        const json = JSON.parse(data.contents);
+        const response = await fetch(targetUrl);
+
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const json = await response.json();
 
         // 1. Verificamos se existe o nome da música
         const musicName = json.data?.music?.name;
 
         if (musicName && musicName.trim() !== "") {
-            // CASO TENHA MÚSICA: Preenche com os dados da API
+            // CASO TENHA MÚSICA
             pageState.nowPlayingData = {
                 song: musicName,
                 artist: json.data?.artist?.name || "Artista Desconhecido",
@@ -71,18 +72,19 @@ export async function fetchNowPlaying() {
                 hasMusic: true
             };
         } else {
-            // CASO NÃO TENHA MÚSICA: Fallback para dados da Rádio
+            // CASO NÃO TENHA MÚSICA
             pageState.nowPlayingData = {
-                song: appState.radioName, // Nome da rádio (ex: Radio Jovem Pan)
-                artist: `${appState.city} - ${appState.state}`, // Localização como "subtítulo"
-                photo: appState.radioLogo, // Logo da rádio
+                song: appState.radioName,
+                artist: `${appState.city} - ${appState.state}`,
+                photo: appState.radioLogo,
                 hasMusic: false
             };
         }
 
     } catch (error) {
-        console.error("Erro ao processar JSON da rádio:", error);
-        // Fallback de erro também mostra os dados da rádio
+        console.error("Erro ao buscar dados da rádio:", error);
+
+        // Fallback em caso de erro
         pageState.nowPlayingData = {
             song: appState.radioName,
             artist: "",
