@@ -1,10 +1,5 @@
-// home_navigation.js
-
 export function initHomeNavigation() {
-    // Busca todos os elementos que podem receber foco
-    const navigableElements = Array.from(document.querySelectorAll('.navigable'));
-
-    // --- PONTE OBRIGATÓRIA PARA FLUTTER/ANDROID ---
+    // 1. A PONTE
     window.handleAndroidKey = function(keyCode) {
         const event = new KeyboardEvent('keydown', {
             keyCode: parseInt(keyCode),
@@ -14,70 +9,52 @@ export function initHomeNavigation() {
         window.dispatchEvent(event);
     };
 
-    // 1. FOCO INICIAL (Ajuste o ID para o primeiro item da sua Home)
+    // 2. BUSCA DE ELEMENTOS
+    // Verifique se os IDs play-pause-btn e fullscreen-btn têm a classe 'navigable' no HTML!
+    const navigableElements = Array.from(document.querySelectorAll('.navigable'));
+
     setTimeout(() => {
-        const initialFocus = document.querySelector('.navigable'); // Foca no primeiro que encontrar
-        if (initialFocus) initialFocus.focus();
+        if (navigableElements.length > 0) navigableElements[0].focus();
     }, 1000);
 
     window.addEventListener('keydown', (e) => {
         const keyCode = e.keyCode || e.which;
         const current = document.activeElement;
-        let currentIndex = navigableElements.indexOf(current);
+        let index = navigableElements.indexOf(current);
 
-        const keys = {
-            UP: 38, DOWN: 40, LEFT: 37, RIGHT: 39, ENTER: 13
-        };
-
-        // Se o foco estiver perdido, volta para o primeiro
-        if (currentIndex === -1 && navigableElements.length > 0) {
-            navigableElements[0].focus();
-            return;
-        }
+        const keys = { UP: 38, DOWN: 40, LEFT: 37, RIGHT: 39, ENTER: 13 };
 
         switch(keyCode) {
             case keys.RIGHT:
-                if (currentIndex < navigableElements.length - 1) {
-                    navigableElements[currentIndex + 1].focus();
-                }
-                break;
-
-            case keys.LEFT:
-                if (currentIndex > 0) {
-                    navigableElements[currentIndex - 1].focus();
-                }
-                break;
-
             case keys.DOWN:
-                // Lógica de "pular linha"
-                // Se sua home for uma grade com 4 itens por linha:
-                // const nextRowIndex = currentIndex + 4;
-                // if (nextRowIndex < navigableElements.length) {
-                //     navigableElements[nextRowIndex].focus();
-                // }
-                
-                // Ou apenas ir para o próximo se for uma lista vertical:
-                if (currentIndex < navigableElements.length - 1) {
-                    navigableElements[currentIndex + 1].focus();
+                if (index < navigableElements.length - 1) {
+                    navigableElements[index + 1].focus();
+                    e.preventDefault();
                 }
                 break;
-
+            case keys.LEFT:
             case keys.UP:
-                if (currentIndex > 0) {
-                    navigableElements[currentIndex - 1].focus();
+                if (index > 0) {
+                    navigableElements[index - 1].focus();
+                    e.preventDefault();
                 }
                 break;
-
             case keys.ENTER:
-                if (current) current.click();
+                if (current) {
+                    console.log("Tentando clicar em:", current.id);
+                    // Força o clique de duas formas para garantir
+                    current.click();
+                    
+                    // Se for um botão de Play/Fullscreen customizado, 
+                    // talvez precise disparar o evento manualmente:
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    current.dispatchEvent(clickEvent);
+                }
                 break;
-        }
-    });
-
-    // Manter o foco ativo
-    document.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('navigable')) {
-            if (navigableElements.length > 0) navigableElements[0].focus();
         }
     });
 }
