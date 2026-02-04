@@ -1,6 +1,27 @@
 export function initHomeNavigation() {
     // 1. A PONTE
     window.handleAndroidKey = function(keyCode) {
+        console.log("Tecla recebida:", keyCode);
+        
+        // Tenta achar o elemento focado
+        const current = document.activeElement;
+
+        // Se a tecla for ENTER (13)
+        if (parseInt(keyCode) === 13 && current) {
+            // 1. Simula o clique físico
+            current.click();
+            
+            // 2. Dispara eventos de Mouse para garantir (importante para Play/Fullscreen)
+            const mouseEvents = ['mousedown', 'mouseup', 'click'];
+            mouseEvents.forEach(type => {
+                current.dispatchEvent(new MouseEvent(type, {
+                    view: window, bubbles: true, cancelable: true
+                }));
+            });
+            return;
+        }
+
+        // Para as outras teclas (Setas), dispara o evento de teclado normal
         const event = new KeyboardEvent('keydown', {
             keyCode: parseInt(keyCode),
             which: parseInt(keyCode),
