@@ -1,9 +1,9 @@
 import { supabaseClient } from './supabase.js';
-import { initLoginNavigation } from './navigation.js';
+import { initTVNavigation } from './navigation.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    initLoginNavigation();
+    initTVNavigation();
 
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
