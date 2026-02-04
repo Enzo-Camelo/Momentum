@@ -5,7 +5,7 @@ import { fetchWeather, fetchExchange, fetchNowPlaying, getWeatherImage, getWeath
 import { initCarousel } from './carousel.js';
 import { toggleStreaming, initLottie } from './audio_player.js';
 import { toggleFullscreen, initFullscreenListener } from './fullscreen.js';
-import { initTVNavigation } from './navigation.js';
+import { initHomeNavigation } from './navigation.js';
 
 // Funções de formatação (podem ficar aqui ou num arquivo utils.js)
 const formatCurrency = (val) => parseFloat(val).toFixed(2).replace('.', ',');
@@ -102,7 +102,7 @@ async function startApp() {
     }
 
     // Primeira carga
-    initTVNavigation();
+    initHomeNavigation();
     await refreshMusic();
     await refreshWeatherAndFinance();
 

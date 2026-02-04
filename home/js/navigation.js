@@ -1,81 +1,83 @@
-export function initTVNavigation() {
+// home_navigation.js
+
+export function initHomeNavigation() {
+    // Busca todos os elementos que podem receber foco
     const navigableElements = Array.from(document.querySelectorAll('.navigable'));
 
-    // 1. FORÇAR FOCO INICIAL (O segredo para a TV começar a navegar)
+    // --- PONTE OBRIGATÓRIA PARA FLUTTER/ANDROID ---
+    window.handleAndroidKey = function(keyCode) {
+        const event = new KeyboardEvent('keydown', {
+            keyCode: parseInt(keyCode),
+            which: parseInt(keyCode),
+            bubbles: true
+        });
+        window.dispatchEvent(event);
+    };
+
+    // 1. FOCO INICIAL (Ajuste o ID para o primeiro item da sua Home)
     setTimeout(() => {
-        const initialFocus = document.getElementById('play-pause-btn') || navigableElements[0];
+        const initialFocus = document.querySelector('.navigable'); // Foca no primeiro que encontrar
         if (initialFocus) initialFocus.focus();
     }, 1000);
 
     window.addEventListener('keydown', (e) => {
-        // Mapeamento de KeyCodes comuns em controles remotos de TV
         const keyCode = e.keyCode || e.which;
-        const keys = {
-            UP: 38,
-            DOWN: 40,
-            LEFT: 37,
-            RIGHT: 39,
-            ENTER: 13,
-            BACK: 461, // LG WebOS
-            RETURN: 10009 // Samsung Tizen
-        };
-
         const current = document.activeElement;
         let currentIndex = navigableElements.indexOf(current);
 
-        // Se o foco se perder por algum motivo, reseta para o play
-        if (currentIndex === -1) {
+        const keys = {
+            UP: 38, DOWN: 40, LEFT: 37, RIGHT: 39, ENTER: 13
+        };
+
+        // Se o foco estiver perdido, volta para o primeiro
+        if (currentIndex === -1 && navigableElements.length > 0) {
             navigableElements[0].focus();
             return;
         }
 
         switch(keyCode) {
-            case keys.UP:
-                // Se estiver no Play, sobe para o primeiro da header (Fullscreen)
-                if (current.id === 'play-pause-btn') {
-                    document.getElementById('logout-btn').focus();
-                }
-                break;
-                
-            case keys.DOWN:
-                // Se estiver em qualquer lugar da header, desce para o Play
-                if (current.id === 'logout-btn' || current.id === 'fullscreen-btn') {
-                    document.getElementById('play-pause-btn').focus();
+            case keys.RIGHT:
+                if (currentIndex < navigableElements.length - 1) {
+                    navigableElements[currentIndex + 1].focus();
                 }
                 break;
 
             case keys.LEFT:
-                if (current.id === 'logout-btn') {
-                    document.getElementById('fullscreen-btn').focus();
+                if (currentIndex > 0) {
+                    navigableElements[currentIndex - 1].focus();
                 }
                 break;
 
-            case keys.RIGHT:
-                if (current.id === 'fullscreen-btn') {
-                    document.getElementById('logout-btn').focus();
+            case keys.DOWN:
+                // Lógica de "pular linha"
+                // Se sua home for uma grade com 4 itens por linha:
+                // const nextRowIndex = currentIndex + 4;
+                // if (nextRowIndex < navigableElements.length) {
+                //     navigableElements[nextRowIndex].focus();
+                // }
+                
+                // Ou apenas ir para o próximo se for uma lista vertical:
+                if (currentIndex < navigableElements.length - 1) {
+                    navigableElements[currentIndex + 1].focus();
+                }
+                break;
+
+            case keys.UP:
+                if (currentIndex > 0) {
+                    navigableElements[currentIndex - 1].focus();
                 }
                 break;
 
             case keys.ENTER:
-                // Simula o clique
-                current.click();
-                break;
-                
-            case keys.BACK:
-            case keys.RETURN:
-                // Opcional: Lógica para fechar o app ou voltar
-                console.log("Botão Voltar pressionado");
+                if (current) current.click();
                 break;
         }
     });
 
-    // Impede que o foco "fuja" para fora do app se o usuário clicar no fundo
+    // Manter o foco ativo
     document.addEventListener('click', (e) => {
         if (!e.target.classList.contains('navigable')) {
-            const current = document.activeElement;
-            if (!current || !current.classList.contains('navigable')) {
-                document.getElementById('play-pause-btn').focus();
-            }
+            if (navigableElements.length > 0) navigableElements[0].focus();
         }
     });
 }
