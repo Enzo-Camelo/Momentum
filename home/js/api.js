@@ -75,7 +75,7 @@ export async function fetchNowPlaying() {
             // CASO NÃO TENHA MÚSICA
             pageState.nowPlayingData = {
                 song: appState.radioName,
-                artist: `${appState.city} - ${appState.state}`,
+                artist: "",
                 photo: appState.radioLogo,
                 hasMusic: false
             };

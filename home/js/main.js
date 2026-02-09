@@ -12,6 +12,17 @@ const formatCurrency = (val) => parseFloat(val).toFixed(2).replace('.', ',');
 const formatPct = (val) => parseFloat(val).toFixed(2).replace('.', ',') + '%';
 
 function updateUI() {
+
+    // 0. Atualiza a Data (Adicionado aqui)
+    const dateEl = document.getElementById('current-date');
+    if (dateEl) {
+        const currentDateText = getFormattedDate();
+        // Só atualiza o DOM se a data mudou (Performance)
+        if (dateEl.textContent !== currentDateText) {
+            dateEl.textContent = currentDateText;
+        }
+    }
+
     // 1. Atualiza Clima e Previsão
     if (pageState.weatherData) {
         const current = pageState.weatherData.current;
@@ -79,8 +90,6 @@ async function startApp() {
     document.getElementById('radio-logo').src = appState.radioLogo;
 
     initClock('current-time');
-    const dateEl = document.getElementById('current-date');
-    if (dateEl) dateEl.textContent = getFormattedDate();
 
     const fsBtn = document.getElementById('fullscreen-btn');
     if (fsBtn) {
@@ -106,7 +115,6 @@ async function startApp() {
     await refreshMusic();
     await refreshWeatherAndFinance();
 
-    // Inicia o Carrossel (Única fonte de verdade agora)
     initCarousel(30000); // 30 segundos
 
     // Intervals
