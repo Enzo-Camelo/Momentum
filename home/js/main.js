@@ -113,12 +113,12 @@ async function startApp() {
     }
 
     // Primeira carga
-    initTVNavigation();
-    await refreshMusic();
-    await refreshWeatherAndFinance();
+    refreshMusic().catch(e => console.error("Falha na música", e));
+    refreshWeatherAndFinance().catch(e => console.error("Falha no clima/finanças", e));
     console.log("Significado da cor do texto: ⚪TUDO OK | 🔴ERRO | 🔵INFO | 🟡AVISO");
     console.log("✅ TODAS AS APIS DERAM CERTO");
-
+    
+    initTVNavigation();
     initCarousel(30000); // 30 segundos
 
     // Intervals

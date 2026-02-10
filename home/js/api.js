@@ -62,49 +62,44 @@ export async function fetchNowPlaying() {
     }
 
     try {
-        console.log("Fazendo requisição para a API da musica atual");
+        console.log("Tentativa DIRETA: Buscando música...");
         const response = await fetch(targetUrl);
-
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
-        }
-        console.log("Passou pela API da musica atual");
-
+        
+        if (!response.ok) throw new Error(`HTTP Erro: ${response.status}`);
+        
         const json = await response.json();
+        processMusicResponse(json);
 
-        // 1. Verificamos se existe o nome da música
-        const musicName = json.data?.music?.name;
+    } catch (directError) {
+        console.warn("Falha na requisição direta, tentando via PROXY...", directError.message);
 
-        if (musicName && musicName.trim() !== "") {
-            // CASO TENHA MÚSICA
-            pageState.nowPlayingData = {
-                song: musicName,
-                artist: json.data?.artist?.name || "Artista Desconhecido",
-                photo: json.data?.artist?.url_photo || appState.radioLogo,
-                hasMusic: true
-            };
-            console.log("Musica atual atualizada!");
-        } else {
-            // CASO NÃO TENHA MÚSICA
+        // 2. TENTATIVA VIA PROXY (Plano B)
+        // Usando o AllOrigins (um proxy gratuito e comum para esses casos)
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+        try {
+            const proxyResponse = await fetch(proxyUrl);
+            if (!proxyResponse.ok) throw new Error("Erro no servidor de Proxy");
+            
+            const proxyData = await proxyResponse.json();
+            
+            // O AllOrigins retorna o JSON original como STRING dentro do campo 'contents'
+            const json = JSON.parse(proxyData.contents);
+            
+            processMusicResponse(json);
+            console.log("Música carregada via PROXY com sucesso.");
+
+        } catch (proxyError) {
+            console.error("DEBUG MÚSICA: Ambas as tentativas falharam.", proxyError);
+
+            // FALLBACK FINAL: Se tudo falhar, mostra o nome da rádio
             pageState.nowPlayingData = {
                 song: appState.radioName,
                 artist: "",
                 photo: appState.radioLogo,
                 hasMusic: false
             };
-            console.log("Musica atual atualizada!");
         }
-
-    } catch (error) {
-        console.error("DEBUG MUSICA ATUAL: Erro ao buscar dados da rádio:", error);
-
-        // Fallback em caso de erro
-        pageState.nowPlayingData = {
-            song: appState.radioName,
-            artist: "",
-            photo: appState.radioLogo,
-            hasMusic: false
-        };
     }
 }
 
@@ -115,6 +110,29 @@ export async function fetchNowPlaying() {
 
 
 
+/*
+    Tenta fazer a requisição do cast pela url ou pelo proxy
+*/
+function processMusicResponse(json) {
+    const musicName = json.data?.music?.name;
+
+    if (musicName && musicName.trim() !== "") {
+        pageState.nowPlayingData = {
+            song: musicName,
+            artist: json.data?.artist?.name || "Artista Desconhecido",
+            photo: json.data?.artist?.url_photo || appState.radioLogo,
+            hasMusic: true
+        };
+    } else {
+        pageState.nowPlayingData = {
+            song: appState.radioName,
+            artist: "",
+            photo: appState.radioLogo,
+            hasMusic: false
+        };
+    }
+    console.log("Música atualizada com sucesso!");
+}
 
 /**
  * Utilitário: Tradução de Weather Code (WMO) para texto/ícone
