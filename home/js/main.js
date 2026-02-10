@@ -6,6 +6,7 @@ import { initCarousel } from './carousel.js';
 import { toggleStreaming, initLottie } from './audio_player.js';
 import { toggleFullscreen, initFullscreenListener } from './fullscreen.js';
 import { initTVNavigation } from './navigation.js';
+import { initDebugConsole } from './debug.js'; // Ajuste o caminho
 
 // Funções de formatação (podem ficar aqui ou num arquivo utils.js)
 const formatCurrency = (val) => parseFloat(val).toFixed(2).replace('.', ',');
@@ -82,6 +83,7 @@ async function refreshWeatherAndFinance() {
 }
 
 async function startApp() {
+    initDebugConsole();
     await loadConfigAndAds(); // Carrega dados do Supabase (inclusive lista de ads)
     initLottie();
 
@@ -114,6 +116,8 @@ async function startApp() {
     initTVNavigation();
     await refreshMusic();
     await refreshWeatherAndFinance();
+    console.log("Significado da cor do texto: ⚪TUDO OK | 🔴ERRO | 🔵INFO | 🟡AVISO");
+    console.log("✅ TODAS AS APIS DERAM CERTO");
 
     initCarousel(30000); // 30 segundos
 

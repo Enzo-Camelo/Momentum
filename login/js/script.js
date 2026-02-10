@@ -1,4 +1,4 @@
-import { supabaseClient } from './supabase.js';
+import { supabaseClient } from '../../supabase.js';
 import { initTVNavigation } from './navigation.js';
 
 document.addEventListener('DOMContentLoaded', () => {

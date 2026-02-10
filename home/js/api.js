@@ -6,19 +6,24 @@ import { appState, pageState } from './state.js';
 export async function fetchWeather() {
     const { userLatitude, userLongitude } = appState;
     
-    if (!userLatitude || !userLongitude) return;
+    if (!userLatitude || !userLongitude) {
+        console.error("DEBUG CLIMA: Coordenadas faltando no appState!");
+        return;
+    }
 
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${userLatitude}&longitude=${userLongitude}&current=apparent_temperature,temperature_2m,is_day,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
 
     try {
+        console.log("Fazendo requisição para a API do clima");
         const response = await fetch(url);
+        console.log("Passou pela API de clima");
         const data = await response.json();
         pageState.weatherData = data;
         
         // Disparar atualização na UI se necessário
-        console.log("Clima atualizado");
+        console.log("Clima atualizado!");
     } catch (error) {
-        console.error("Erro ao buscar clima:", error);
+        console.error("DEBUG CLIMA: Erro ao buscar clima:", error);
     }
 }
 
@@ -29,16 +34,18 @@ export async function fetchWeather() {
  */
 export async function fetchExchange() {
     try {
+        console.log("Fazendo requisição para a API da cotação");
         const response = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL', {
             headers: {
                 'Authorization': 'ea7dd3e95354fd0485abebe8786ca4d36932b858e7e14ad60213adfcdfb13670'
             }
         });
+        console.log("Passou pela API da cotação");
         const data = await response.json();
         pageState.exchangeData = data;
-        console.log("Cotações atualizadas");
+        console.log("Cotações atualizadas!");
     } catch (error) {
-        console.error("Erro ao buscar cotação:", error);
+        console.error("DEBUG COTAÇÕES: Erro ao buscar cotação:", error);
     }
 }
 
@@ -49,14 +56,19 @@ export async function fetchExchange() {
  */
 export async function fetchNowPlaying() {
     const targetUrl = appState.urlCastResource;
-    if (!targetUrl || targetUrl === 'null' || targetUrl === '') return;
+    if (!targetUrl || targetUrl === 'null' || targetUrl === '') {
+        console.log("DEBUG MUSICA ATUAL: urlCastResource faltando no appState!");
+        return;   
+    }
 
     try {
+        console.log("Fazendo requisição para a API da musica atual");
         const response = await fetch(targetUrl);
 
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
         }
+        console.log("Passou pela API da musica atual");
 
         const json = await response.json();
 
@@ -71,6 +83,7 @@ export async function fetchNowPlaying() {
                 photo: json.data?.artist?.url_photo || appState.radioLogo,
                 hasMusic: true
             };
+            console.log("Musica atual atualizada!");
         } else {
             // CASO NÃO TENHA MÚSICA
             pageState.nowPlayingData = {
@@ -79,10 +92,11 @@ export async function fetchNowPlaying() {
                 photo: appState.radioLogo,
                 hasMusic: false
             };
+            console.log("Musica atual atualizada!");
         }
 
     } catch (error) {
-        console.error("Erro ao buscar dados da rádio:", error);
+        console.error("DEBUG MUSICA ATUAL: Erro ao buscar dados da rádio:", error);
 
         // Fallback em caso de erro
         pageState.nowPlayingData = {
